@@ -1,0 +1,251 @@
+<div class="layout-main">
+    <div class="layout-content">
+
+        <div class="ui-g">
+            <div class="ui-lg-12 ui-md-12 ui-sm-12">
+                <p-panel header="Series">
+                    <div class="ui-g">
+                        <div class="ui-g-12 ui-md-10">
+                            <div class="ui-inputgroup">
+                                <span class="ui-inputgroup-addon"><i class="fa fa-search"></i></span>
+                                <input style="text-align: left;" type="text" pInputText (input)="dt.filterGlobal($event.target.value, 'contains')">
+                            </div>
+                        </div>
+                        <div class="ui-g-12 ui-md-2">
+                            <button pButton type="button" label="Nueva Serie" style="float: right;" class="ui-button-success" routerLink="/serie"></button>
+                        </div>
+                        <div class="ui-g-12 ui-md-12">
+                            <p-table  itemid=""  id="series" #dt [columns]="cols" [value]="series" dataKey="id"
+                            [paginator]="true" [rows]="10" [responsive]="true" (onRowSelect)="onRowSelect($event)">
+
+                                <ng-template pTemplate="header" let-columns>
+                                <tr>
+                                    <th style="width: 10%;" [pSortableColumn]="cols[0].field">#
+                                        <p-sortIcon [field]="cols[0].field"></p-sortIcon>
+                                    </th>
+                                    <th style="width: 40%;" [pSortableColumn]="cols[1].field">Nombre
+                                        <p-sortIcon [field]="cols[1].field"></p-sortIcon>
+                                    </th>
+                                    <th style="width: 25%;" [pSortableColumn]="cols[2].field">Género
+                                        <p-sortIcon [field]="cols[2].field"></p-sortIcon>
+                                    </th>
+                                    <th style="width: 15%;" [pSortableColumn]="cols[3].field">Canal
+                                        <p-sortIcon [field]="cols[3].field"></p-sortIcon>
+                                    </th>
+                                    <th style="width: 15%;" [pSortableColumn]="cols[4].field">Temporadas
+                                        <p-sortIcon [field]="cols[4].field"></p-sortIcon>
+                                    </th>
+                                    <th style="width: 15%;" [pSortableColumn]="cols[5].field">Estado
+                                        <p-sortIcon [field]="cols[5].field"></p-sortIcon>
+                                    </th>
+                                    <th style="width: 20%;" [pSortableColumn]="cols[6].field">Emisión
+                                        <p-sortIcon [field]="cols[6].field"></p-sortIcon>
+                                    </th>
+                                    <th style="width: 5%;">                                        
+                                    </th>
+                                </tr>
+                                </ng-template>
+                                
+                                <ng-template pTemplate="body" let-columns="columns" let-serie let-rowIndex=rowIndex>
+                                    <tr [pSelectableRow]="serie">
+                                        <td style="text-align: center;" class="label-text">{{ rowIndex+1 }}</td>
+                                        <td style="text-align: left;" class="label-text">{{serie.name}}</td>
+                                        <td style="text-align: left;" class="label-text">{{serie.genre.name}}</td>
+                                        <td style="text-align: left;" class="label-text">{{serie.emitter.name}}</td>
+                                        <td style="text-align: right;" class="label-text">{{serie.seasons}}</td>
+                                        <td style="text-align: left;" class="label-text">{{serie.state.description}}</td>
+                                        <td style="text-align: left;" class="label-text">{{serie.from}} - {{serie.to}}</td>
+                                        <td style="text-align: left;" class="label-text"><img src="../../../assets/images/CPIIFDetalle.gif" title="Ver Detalle" style="cursor: pointer;" (click)="onShowSerie(serie)"/></td>
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                        </div>
+                    </div>
+                </p-panel>
+            </div>
+        </div>
+
+        <!--p-panel>
+            <p-header>
+                <div>
+                    Registration Form
+                    <p-button icon="pi pi-check" style="float:right" label="Add">
+                    </p-button>
+                </div>
+            </p-header>
+        </p-panel-->
+
+        <p-sidebar [(visible)]="display" [blockScroll]="true" position="right" styleClass="ui-sidebar-lg">
+
+                <div class="ui-fluid" style="background-color: #F2F8FA; padding-right: 20px;">
+                    <div class="ui-g">
+                        <div class="ui-g-12">
+                            <div class="card card-w-title">
+                                <div class="ui-g form-group">
+                                    <div class="ui-g-12 ui-md-6"><span></span></div>
+
+                                    <div class="ui-g-12 ui-md-3">
+                                        <button pButton type="button" 
+                                                label="Actualizar" 
+                                                class="ui-button-success"                                                 
+                                                (click)="updateSerie()"
+                                                routerLink="/series">
+                                        </button>
+                                    </div>
+
+                                    <div class="ui-g-12 ui-md-3">
+                                        <button pButton type="button" 
+                                                label="Cancelar" 
+                                                class="ui-button-success" 
+                                                (click)="onClosePanel()">
+                                        </button>
+                                    </div>
+                                        
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="width:100%">
+                    <p-tabView>
+                        <p-tabPanel header="Información General">
+
+                            <div class="ui-g">
+                                <div class="ui-lg-12 ui-md-12 ui-sm-12">
+                                    <p-panel header="Serie">
+                                        <div class="ui-g">
+                                            <div class="ui-g-12 ui-md-2">
+                                                <label for="input">Serie :</label>
+                                            </div>                        
+                                            <div class="ui-g-12 ui-md-10">
+                                                <input  style="width: 400px"
+                                                        required
+                                                        type="text" 
+                                                        maxlength="100" 
+                                                        pInputText placeholder="Serie"
+                                                        [(ngModel)]="serieName" name="contactName"
+                                                        #contactName="ngModel"/>
+                                            </div>
+                                            <div class="ui-g-12 ui-md-2">
+                                                    <label for="dropdown">Género :</label>
+                                            </div>
+                                            <div class="ui-g-12 ui-md-10">
+                                                <p-dropdown [options]="types"
+                                                            [(ngModel)]="serieType"
+                                                            placeholder="Seleccione género"
+                                                            optionLabel="name">
+                                                </p-dropdown>
+                                            </div>
+                                            <div class="ui-g-12 ui-md-2">
+                                                <label for="dropdown">Emisión :</label>
+                                            </div>
+                                            <div class="ui-g-12 ui-md-10">
+                                                <p-autoComplete required                                                                
+                                                                id="customerId" [suggestions]="filteredEmitter" (completeMethod)="filterEmitter($event)" 
+                                                                field="account" [size]="15"
+                                                                minlength="1" maxlength="50"
+                                                                placeholder="Ingrese Canal" [minLength]="1"
+                                                                [(ngModel)]="serieEmitter" name="customerId"
+                                                                #customerId="ngModel" field="name">
+                                                </p-autoComplete>
+                                            </div>    
+                                            <div class="ui-g-12 ui-md-2">
+                                                <label for="input">Temporadas :</label>
+                                            </div>                        
+                                            <div class="ui-g-12 ui-md-10">
+                                                <input  style="width: 185px"
+                                                        required
+                                                        type="text" 
+                                                        maxlength="100" 
+                                                        pInputText placeholder="Temporadas"
+                                                        [(ngModel)]="serieSeasons" name="contactName"
+                                                        #contactName="ngModel"/>
+                                            </div>
+                                            <div class="ui-g-12 ui-md-2">
+                                                <label for="dropdown">Estado:</label>
+                                            </div>                                 
+                                            <div class="ui-g-12 ui-md-10">
+                                                <p-dropdown [options]="states"
+                                                            [(ngModel)]="serieState"
+                                                            placeholder="Seleccione Estado"
+                                                            optionLabel="description">
+                                                </p-dropdown>
+                                            </div>
+                                            <div class="ui-g-12 ui-md-2">
+                                                <label for="input">Años Emisión :</label>
+                                            </div>                        
+                                            <div class="ui-g-12 ui-md-1">
+                                                <input  style="width: 50px"
+                                                        required
+                                                        type="text" 
+                                                        maxlength="4"
+                                                        pKeyFilter="num"
+                                                        pInputText placeholder="Desde"
+                                                        [(ngModel)]="serieFrom" name="desde"
+                                                        #desde="ngModel"/>
+                                            </div>
+                                            <div class="ui-g-12 ui-md-1">
+                                                <input  style="width: 50px"
+                                                        required
+                                                        type="text" 
+                                                        maxlength="4" 
+                                                        pKeyFilter="num"
+                                                        pInputText placeholder="Hasta"
+                                                        [(ngModel)]="serieTo" name="hasta"
+                                                        #hasta="ngModel"/>
+                                            </div>
+                                            <div class="ui-g-12 ui-md-8">
+                                            </div>
+                                            <div class="ui-g-12 ui-md-2">
+                                                <label for="input">Creado Por :</label>
+                                            </div>                        
+                                            <div class="ui-g-12 ui-md-10">
+                                                <input  style="width: 185px"
+                                                        required
+                                                        type="text" 
+                                                        maxlength="100" 
+                                                        pInputText placeholder="Por"
+                                                        [(ngModel)]="serieCreated" name="contactName"
+                                                        #contactName="ngModel"/>
+                                            </div>
+                                            <div class="ui-g-12 ui-md-2">
+                                                <label for="input">Episodios :</label>
+                                            </div>                        
+                                            <div class="ui-g-12 ui-md-10">
+                                                <input  style="width: 185px"
+                                                        required
+                                                        type="text" 
+                                                        maxlength="100" 
+                                                        pInputText placeholder="Ingrese Cantidad"
+                                                        [(ngModel)]="serieEpisodes" name="contactName"
+                                                        #contactName="ngModel"/>
+                                            </div>
+                                            <div class="ui-g-12 ui-md-2">
+                                                <label for="input">País Orígen :</label>
+                                            </div>                        
+                                            <div class="ui-g-12 ui-md-10">
+                                                <input  style="width: 185px"
+                                                        required
+                                                        type="text" 
+                                                        maxlength="100" 
+                                                        pInputText placeholder="Origen"
+                                                        [(ngModel)]="serieOrigin" name="contactName"
+                                                        #contactName="ngModel"/>
+                                            </div>                    
+                                        </div>
+                                    </p-panel>
+                                </div>
+                            </div>                            
+                            
+                        </p-tabPanel>
+                    </p-tabView>
+                </div>
+    
+
+        </p-sidebar>
+
+    </div>
+</div>
+
+
